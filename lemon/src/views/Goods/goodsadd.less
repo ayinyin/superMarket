@@ -1,0 +1,40 @@
+.goodsadd{
+    .el-form{
+        .el-form-item{
+            &:first-child{
+                .el-form-item__content{
+                    .el-input{
+                        width: 200px;
+                    }
+                }
+            }
+            &:last-child{
+                .el-form-item__content{
+                    width: 400px;
+                }
+            }
+            .el-form-item__content{ 
+                width: 500px;
+                .el-input{
+                    width: 100px;
+                    margin-right: 5px;
+                }
+                .el-button{
+                    margin-left: 10px;
+                }
+            }
+            &:nth-child(2) ,&:nth-child(3){
+                .el-form-item__content{
+                    .el-input{
+                        width: 300px;
+                    }
+                    .el-button{
+                        margin-left: 10px;
+                    }
+                }
+            }
+           
+        }
+    }
+    
+}

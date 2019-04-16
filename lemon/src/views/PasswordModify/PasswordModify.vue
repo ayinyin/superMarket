@@ -24,7 +24,6 @@
                 <el-form-item>
                     <el-button type="primary" @click="submitForm()">修改</el-button>
                 </el-form-item>
-
             </el-form>
         </el-card>
     </div>
@@ -32,8 +31,41 @@
 <script>
 // 引入验证函数
 import { passwordReg } from "@/utils/validator"
+// local 
+import local from "@/utils/local"
 export default {
     data(){
+        // 旧密码
+        const oldpasscheck = (rules,value,callback) => {
+            if(value === ""){
+                callback(new Error("请输入密码！"))
+            }else{
+                // local验证
+                // if(local.get('a_ying') === value){
+                //     callback();
+                // } else{
+                //     callback(new Error("与原密码不一致！"))
+                // }
+                // 发送表单
+                this.request.get('/account/chackoldpass', { password : value })
+                    .then(res => {
+                        console.log(res)
+                        // 解构
+                        let {code,message} = res;
+                        if(code === 0){
+                            callback();
+                        }else{
+                            callback(new Error(message))
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+
+            }
+            
+
+        }
         // 新密码验证
         const newpasscheck = (rules,value,callback) => {
             if(value === ""){
@@ -67,7 +99,7 @@ export default {
             rules:{
                 // 旧密码的验证
                 oldpassword:[
-                    {required:true,message:"请填写旧密码嗷~",trigger:"blur"}
+                    {required:true,validator:oldpasscheck,trigger:"blur"}
                 ],
                 // 新密码的验证
                 newpassword:[
@@ -87,12 +119,28 @@ export default {
                 if(valid) {
                     // 收集数据
                     let params = {
-                        oldpassword:this.passwordForm.oldpassword,
                         newpassword:this.passwordForm.newpassword
                     }
-                    alert("修改密码成功，请阅览~");
-                    // 设置路由地址 --- 跳转
-                    this.$router.push("/home/accountmanage");
+                    this.request.post('/account/modifyPass',params)
+                        .then(res => {
+                            console.log(res)
+                            // 解构
+                            let {code,message} = res;
+                            if(code === 0){
+                                this.$message({
+                                    type:"success",
+                                    message
+                                })
+                                local.remove("a_yin_yin_na");
+                                // 设置路由地址 --- 跳转
+                                this.$router.push("/home/accountmanage");
+                            }else{
+                                this.$message.error(message);
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
                 }
             })
         }

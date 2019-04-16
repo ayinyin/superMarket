@@ -6,7 +6,20 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+// 引入account文件
+const accountRouter = require("./routes/account")
+// 引入goods文件
+const goodsRouter = require("./routes/goods")
+// 引入admin文件
+const adminRouter = require("./routes/admin")
+// 引入login文件
+const loginRouter = require("./routes/login")
+// 引入inventory文件
+const inventoryRouter = require("./routes/inventory")
+// 引入total
+const totalRouter = require('./routes/total')
+// 引入shipping
+const shippingRouter = require('./routes/shipping')
 var app = express();
 
 // view engine setup
@@ -21,13 +34,26 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// 配置account路由
+app.use('/account',accountRouter);
+// 配置goods路由
+app.use('/goods',goodsRouter);
+// 配置admin路由
+app.use('/admin',adminRouter);
+// 配置login路由
+app.use('/login',loginRouter);
+// 配置inventoryRouter路由
+app.use('/inventory',inventoryRouter)
+// 配置total路由
+app.use('/total',totalRouter);
+// 配置shipping路由
+app.use('/shipping',shippingRouter);
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

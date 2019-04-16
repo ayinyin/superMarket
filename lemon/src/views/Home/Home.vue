@@ -13,11 +13,11 @@
             <el-container>
                 <!-- 头 -->
                 <el-header>
-                    <Top></Top>
+                    <Top ref="top"></Top>
                 </el-header>
                 <!-- 中 -->
                 <el-main>
-                    <router-view></router-view>
+                    <router-view @A='B'></router-view>
 
                 </el-main>
                 <!-- 尾 -->
@@ -43,6 +43,11 @@ export default {
         Leftnav,
         Top,
         Bottom
+    },
+    methods:{
+        B(){
+            this.$refs.top.accpountInfo();
+        }
     }
 }
 </script>

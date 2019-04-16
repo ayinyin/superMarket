@@ -30,7 +30,11 @@
     </div>
 </template>
 <script>
+// 验证密码
 import { passwordReg } from "@/utils/validator"
+// localstorage
+import local from "@/utils/local"
+
 export default {
     data () {
         // 验证密码
@@ -88,14 +92,31 @@ export default {
             // 验证loginForm对象
             this.$refs.loginForm.validate(valid => {
                 if(valid){
+                    // 接收参数
                     let params = {
                         account :this.loginForm.account,
                         password : this.loginForm.password
                     }
-                    console.log(params);
-                    alert("登陆成功嗷~")
-                    // 路由跳转
-                    this.$router.push("/home");
+                    // 发送请求
+                    this.request.post('/login/checkLogin',params)
+                        .then(res => {
+                            // 接收数据
+                            let {code,message,token} = res;
+                            if(code === 0){
+                                this.$message({
+                                    type:"success",
+                                    message
+                                })
+                                local.set("a_yin_yin_na",token);
+                                // 路由跳转
+                                this.$router.push("/home");
+                            }else{
+                                this.$message.error(message);
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
                 } else {
                     alert("验证出错~")
                     return
@@ -109,7 +130,6 @@ export default {
         }
     }
 }
-
 </script>
 <style lang="less">
     @import './login.less';
